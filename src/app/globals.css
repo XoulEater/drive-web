@@ -1,3 +1,4 @@
+@import url('https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,100;0,300;0,400;0,700;0,900;1,100;1,300;1,400;1,700;1,900&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
 @import "tailwindcss";
 
 :root {
@@ -12,15 +13,66 @@
   --font-mono: var(--font-geist-mono);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
-}
+
 
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: 'Lato', sans-serif;
+}
+
+.option-button {
+  @apply inline-flex items-center gap-1 justify-center pr-3 pl-2  py-2 text-xs font-medium    rounded-md shadow-sm  focus:outline-none focus:ring-2 focus:ring-offset-2 transition-colors duration-300 ease-in-out ;
+}
+
+.option-button.blue {
+  @apply bg-blue-200 text-blue-500  hover:bg-blue-300 ;
+}
+
+.option-button.red {
+  @apply bg-red-200 text-red-500 hover:bg-red-300;
+}
+
+.option-button.green {
+  @apply bg-green-200 text-green-500 hover:bg-green-300;
+}
+
+.option-button.gray {
+  @apply bg-gray-200 text-gray-500 hover:bg-gray-300;
+}
+
+.option-button.purple {
+  @apply bg-purple-200 text-purple-500 hover:bg-purple-300;
+}
+
+.option-button.yellow {
+  @apply bg-yellow-200 text-yellow-500 hover:bg-yellow-300;
+}
+
+.option-button.cyan {
+  @apply bg-cyan-200 text-cyan-500 hover:bg-cyan-300;
+}
+.option-button.orange {
+  @apply bg-orange-200 text-orange-500 hover:bg-orange-300;
+}
+
+.main-button {
+  @apply inline-flex place-items-center gap-1 text-white px-4 py-2 rounded-md  transition-colors duration-300 ease-in-out
+}
+
+.main-button.blue {
+  @apply bg-gradient-to-br from-blue-500 via-blue-600 to-blue-700 hover:bg-gradient-to-r focus:ring-4 focus:outline-none focus:ring-blue-300;
+}
+.main-button.red {
+  @apply bg-gradient-to-br from-red-500 via-red-600 to-red-700 hover:bg-gradient-to-r focus:ring-4 focus:outline-none focus:ring-red-300;
+}
+.main-button.green {
+  @apply bg-gradient-to-br from-green-500 via-green-600 to-green-700 hover:bg-gradient-to-r focus:ring-4 focus:outline-none focus:ring-green-300;
+}
+.main-button.indigo {
+  @apply bg-gradient-to-br from-indigo-500 via-indigo-600 to-indigo-700 hover:bg-gradient-to-r focus:ring-4 focus:outline-none focus:ring-indigo-300;
+}
+
+.main-button.gray {
+  @apply bg-gradient-to-br from-gray-500 via-gray-600 to-gray-700 hover:bg-gradient-to-r focus:ring-4 focus:outline-none focus:ring-gray-300;
 }

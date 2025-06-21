@@ -22,15 +22,10 @@ This project uses [`next/font`](https://nextjs.org/docs/app/building-your-applic
 
 ## Learn More
 
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Este proyecto tiene como finalidad implementar un drive Web para archivos. La intención es poner
+en práctica los conocimientos sobre File Systems. Para esto se implementarán las funciones del File
+System que se desglosan posteriormente.
+La idea es que deben crear una aplicación Web donde los usuarios pueden solicitar un espacio para
+almacenamiento de archivos. Esta aplicación se debe conectar a un server de manera distribuida
+que sepa cómo responder a las peticiones de los diferentes clientes dentro de sus respectivos
+espacios.
