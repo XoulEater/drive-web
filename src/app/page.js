@@ -327,6 +327,8 @@ export default function DriveWeb() {
 
         Object.keys(structure).forEach((path) => {
             if (structure[path].type === "folder") {
+                if (path === "/shared") return;
+
                 paths.push(path);
             }
         });
@@ -393,11 +395,6 @@ export default function DriveWeb() {
         const itemName = showMoveDialog.name;
         const isFolder = showMoveDialog.type === "folder";
 
-        console.log(
-            `Moviendo ${
-                isFolder ? "carpeta" : "archivo"
-            }: ${itemName} de ${sourcePath} a ${targetPath}`
-        );
         if (sourcePath === targetPath) {
             alert("La carpeta de origen y destino no pueden ser la misma");
             return;
@@ -1505,11 +1502,13 @@ export default function DriveWeb() {
                                     }
                                     className="w-full p-2 border border-gray-300 rounded-md"
                                 >
-                                    {getAllPaths().map((path) => (
-                                        <option key={path} value={path}>
-                                            {path === "/" ? "Raíz" : path}
-                                        </option>
-                                    ))}
+                                    {true
+                                        ? getAllPaths().map((path) => (
+                                              <option key={path} value={path}>
+                                                  {path === "/" ? "Raíz" : path}
+                                              </option>
+                                          ))
+                                        : "    No hay rutas disponibles"}
                                 </select>
                                 <div className="flex space-x-3">
                                     <button
@@ -1554,29 +1553,13 @@ export default function DriveWeb() {
                                     }
                                     className="w-full p-2 border border-gray-300 rounded-md"
                                 >
-                                    {getAllPaths()
-                                        .filter((path) => {
-                                            // Evitar mover a la misma carpeta o dentro de sí misma
-                                            if (path === currentPath)
-                                                return false;
-                                            if (
-                                                showMoveDialog.type === "folder"
-                                            ) {
-                                                const itemPath =
-                                                    currentPath === "/"
-                                                        ? `/${showMoveDialog.name}`
-                                                        : `${currentPath}/${showMoveDialog.name}`;
-                                                return !path.startsWith(
-                                                    itemPath
-                                                );
-                                            }
-                                            return true;
-                                        })
-                                        .map((path) => (
-                                            <option key={path} value={path}>
-                                                {path === "/" ? "Raíz" : path}
-                                            </option>
-                                        ))}
+                                    {true
+                                        ? getAllPaths().map((path) => (
+                                              <option key={path} value={path}>
+                                                  {path === "/" ? "Raíz" : path}
+                                              </option>
+                                          ))
+                                        : "No hay rutas disponibles"}
                                 </select>
                                 <div className="flex space-x-3">
                                     <button
