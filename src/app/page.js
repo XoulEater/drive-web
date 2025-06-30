@@ -1,5 +1,6 @@
 "use client";
 import { useState, useEffect } from "react";
+import { apiService } from "../services/api";
 
 export default function DriveWeb() {
     // Estados principales
@@ -31,23 +32,34 @@ export default function DriveWeb() {
     const [copyMoveForm, setCopyMoveForm] = useState({ targetPath: "/" });
     const [loadedFile, setLoadedFile] = useState(null);
 
-    // Cargar datos del localStorage al iniciar
+    // Cargar datos del API al iniciar
     useEffect(() => {
-        const savedData = localStorage.getItem("driveWebData");
-        if (savedData) {
-            const data = JSON.parse(savedData);
-            setFileSystem(data);
-        }
+        const loadData = async () => {
+            try {
+                const data = await apiService.getData();
+                setFileSystem(data);
+            } catch (error) {
+                console.error("Error loading data:", error);
+                setFileSystem({});
+            }
+        };
+
+        loadData();
     }, []);
 
-    // Guardar datos en localStorage
-    const saveData = (data) => {
-        localStorage.setItem("driveWebData", JSON.stringify(data));
-        setFileSystem(data);
+    // Guardar datos en API
+    const saveData = async (data) => {
+        try {
+            await apiService.saveData(data);
+            setFileSystem(data);
+        } catch (error) {
+            console.error("Error saving data:", error);
+            alert("Error al guardar los datos. Por favor, intenta de nuevo.");
+        }
     };
 
     // Crear nuevo drive
-    const createDrive = () => {
+    const createDrive = async () => {
         if (!driveForm.name || !driveForm.size) return;
 
         const newData = {
@@ -70,7 +82,7 @@ export default function DriveWeb() {
             },
         };
 
-        saveData(newData);
+        await saveData(newData);
         setDriveForm({ name: "", size: "" });
         setShowCreateDrive(false);
     };
@@ -104,7 +116,7 @@ export default function DriveWeb() {
     };
 
     // Crear archivo
-    const createFile = () => {
+    const createFile = async () => {
         if (!fileForm.name || !user) return;
 
         const fileName = `${fileForm.name}.${fileForm.extension}`;
@@ -135,14 +147,14 @@ export default function DriveWeb() {
         };
         newData[user].currentSize += fileSize;
 
-        saveData(newData);
+        await saveData(newData);
         loadCurrentDirectory();
         setFileForm({ name: "", content: "", extension: "txt" });
         setShowCreateFile(false);
     };
 
     // Crear carpeta
-    const createFolder = () => {
+    const createFolder = async () => {
         if (!folderForm.name || !user) return;
 
         const currentDir = fileSystem[user].structure[currentPath];
@@ -167,7 +179,7 @@ export default function DriveWeb() {
             created: new Date().toISOString(),
         };
 
-        saveData(newData);
+        await saveData(newData);
         loadCurrentDirectory();
         setFolderForm({ name: "" });
         setShowCreateFolder(false);
@@ -194,7 +206,7 @@ export default function DriveWeb() {
     };
 
     // Eliminar archivo/carpeta
-    const deleteItem = (itemName, isFolder) => {
+    const deleteItem = async (itemName, isFolder) => {
         if (!confirm(`¿Está seguro de eliminar ${itemName}?`)) return;
 
         const newData = { ...fileSystem };
@@ -235,12 +247,12 @@ export default function DriveWeb() {
             delete newData[user].structure[currentPath].children[itemName];
         }
 
-        saveData(newData);
+        await saveData(newData);
         loadCurrentDirectory();
     };
 
     // Compartir archivo
-    const shareFile = (fileName) => {
+    const shareFile = async (fileName) => {
         if (!shareForm.targetUser || !fileSystem[shareForm.targetUser]) {
             alert("Usuario no encontrado");
             return;
@@ -256,14 +268,14 @@ export default function DriveWeb() {
                 sharedDate: new Date().toISOString(),
             };
 
-        saveData(newData);
+        await saveData(newData);
         setShareForm({ targetUser: "" });
         setShowShareDialog(null);
         alert("Archivo compartido exitosamente");
     };
 
     // Editar archivo
-    const editFile = () => {
+    const editFile = async () => {
         if (!showEditFile || !user) return;
 
         const newData = { ...fileSystem };
@@ -291,7 +303,7 @@ export default function DriveWeb() {
         newData[user].currentSize =
             newData[user].currentSize - oldSize + newSize;
 
-        saveData(newData);
+        await saveData(newData);
         loadCurrentDirectory();
         setShowEditFile(null);
     };
@@ -337,7 +349,7 @@ export default function DriveWeb() {
     };
 
     // Copiar archivo
-    const copyFile = () => {
+    const copyFile = async () => {
         if (!showCopyDialog || !copyMoveForm.targetPath) return;
 
         const sourcePath = currentPath;
@@ -379,7 +391,7 @@ export default function DriveWeb() {
         };
         newData[user].currentSize += sourceFile.size;
 
-        saveData(newData);
+        await saveData(newData);
         loadCurrentDirectory();
         setCopyMoveForm({ targetPath: "/" });
         setShowCopyDialog(null);
@@ -387,7 +399,7 @@ export default function DriveWeb() {
     };
 
     // Mover archivo o directorio
-    const moveItem = () => {
+    const moveItem = async () => {
         if (!showMoveDialog || !copyMoveForm.targetPath) return;
 
         const sourcePath = currentPath;
@@ -454,7 +466,7 @@ export default function DriveWeb() {
             });
         }
 
-        saveData(newData);
+        await saveData(newData);
         loadCurrentDirectory();
         setCopyMoveForm({ targetPath: "/" });
         setShowMoveDialog(null);
@@ -476,7 +488,7 @@ export default function DriveWeb() {
         }
 
         const reader = new FileReader();
-        reader.onload = (e) => {
+        reader.onload = async (e) => {
             const content = e.target.result;
             const fileSize = content.length;
 
@@ -506,7 +518,7 @@ export default function DriveWeb() {
             };
             newData[user].currentSize += fileSize;
 
-            saveData(newData);
+            await saveData(newData);
             loadCurrentDirectory();
             setShowLoadFile(false);
             alert("Archivo cargado exitosamente");
@@ -861,7 +873,7 @@ export default function DriveWeb() {
                                                                     d="M0 0h24v24H0V0z"
                                                                     fill="none"
                                                                 />
-                                                                <path d="M19 15l-6 6-1.42-1.42L15.17 16H4V4h2v10h9.17l-3.59-3.58L13 9l6 6z" />
+                                                                <path d="M19 15l-6 6-1.42-1.41L15.17 16H4V4h2v10h9.17l-3.59-3.58L13 9l6 6z" />
                                                             </svg>
                                                             Abrir
                                                         </button>

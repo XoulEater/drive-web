@@ -1,0 +1,20 @@
+{
+  "driveWebData": {
+    "jose": {
+      "maxSize": 5000,
+      "currentSize": 0,
+      "structure": {
+        "/": {
+          "type": "folder",
+          "children": {},
+          "created": "2025-06-30T15:15:10.915Z"
+        },
+        "/shared": {
+          "type": "folder",
+          "children": {},
+          "created": "2025-06-30T15:15:10.915Z"
+        }
+      }
+    }
+  }
+}
